@@ -1,0 +1,29 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.justinjmoses.flexmojos-introduction</groupId>
+    <artifactId>flexmojos-simplist</artifactId>
+    <version>0.1-SNAPSHOT</version>
+
+    <packaging>swf</packaging>
+
+    <build>
+        <sourceDirectory>src/main/flex</sourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.flexmojos</groupId>
+                <artifactId>flexmojos-maven-plugin</artifactId>
+                <version>4.0-RC2</version>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>flex-framework</artifactId>
+            <version>4.5.1.21328</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+</project>

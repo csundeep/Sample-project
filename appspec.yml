@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /SmartConnect.war
+    destination: /opt/tomcat/apache-tomee-plume-7.0.5/webapps/
+hooks:
+  ApplicationStop:
+    - location: /stop_server
+      timeout: 300
+      runas: root
+  BeforeInstall:
+    - location: /removeFiles
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: /start_server
+      timeout: 300
+      runas: root

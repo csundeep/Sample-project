@@ -1,0 +1,149 @@
+<?xml version="1.0" ?>
+<project name="Sample project" default="dist">
+
+	<property file="build.properties" />
+
+
+	<!-- SDK properties -->
+	<property name="mxmlc.jar" location="${sdk.home}/lib/mxmlc.jar" />
+	<property name="adt.jar" location="${sdk.home}/lib/adt.jar" />
+
+	<!-- Project properties -->
+	<property name="main.source.file" location="src/${app.main.source.file.name}.mxml" />
+	<property name="app.root.file" value="${app.main.source.file.name}.swf" />
+	<property name="dist" location="dist" />
+	<property name="build" location="${dist}/build">
+	</property>
+	<property name="assets" location="src/assets" />
+	<property name="app.descriptor" location="${build}/${app.main.source.file.name}-app.xml" />
+	<property name="app.keystore.fullpath" location="${basedir}/${app.keystore}" />
+
+	<!--
+				=======================================================================
+				Clean
+
+				============================================================================
+			-->
+	<target name="clean">
+		<delete dir="${dist}" />
+
+	</target>
+	<!--
+			=======================================================================
+			Init
+			1) Clean
+			2) Create package and build dir
+			3) Init timestamp (later used by DSTAMP)
+			============================================================================
+		-->
+	<target name="init" depends="clean">
+		<tstamp />
+		<mkdir dir="${dist}" />
+		<mkdir dir="${build}" />
+	</target>
+	<!--
+			=======================================================================
+			Compile
+			1) Builds the swf file
+			2) Sets the version
+			3) Sets the server
+
+			============================================================================
+		-->
+	<target name="compile" depends="init">
+		<java jar="${mxmlc.jar}" fork="true" failonerror="true" maxmemory="512m">
+			<arg value="-debug=false" />
+			<arg value="-warnings=false" />
+			<arg value="+flexlib=${sdk.home}/frameworks" />
+			<arg value="-library-path+=libs" />
+			<arg value="+configname=air" />
+			<arg value="-file-specs=${main.source.file}" />
+			<arg value="-output=${build}/${app.root.file}" />
+		</java>
+	</target>
+
+	<!--
+		=======================================================================
+						Creates the package (AIR)
+
+		============================================================================
+	-->
+
+	<target name="package">
+		<copy tofile="${build}/assets/appProp.xml" file="res/appProp/${dist.for}.xml" overwrite="true" />
+
+		<java jar="${adt.jar}" fork="true" failonerror="true" maxmemory="512m">
+			<arg value="-package" />
+			<arg value="-storetype" />
+			<arg value="${app.storetype}" />
+			<arg value="-storepass" />
+			<arg value="${app.storepass}" />
+			<arg value="-keystore" />
+			<arg value="${app.keystore.fullpath}" />
+			<arg value="${build}/${app.dist.name}.air" />
+			<arg value="${app.descriptor}" />
+			<arg value="-C" />
+			<arg value="${build}" />
+			<arg value="${app.root.file}" />
+			<arg value="-C" />
+			<arg value="${build}" />
+			<arg value="assets" />
+		</java>
+
+		<java jar="${adt.jar}" fork="true" failonerror="true" maxmemory="512m">
+			<arg value="-package" />
+			<arg value="-target" />
+			<arg value="native" />
+			<arg value="${dist}/${app.dist.name}.exe" />
+			<arg value="${build}/${app.dist.name}.air" />
+
+		</java>
+		<mkdir dir="${dist}/${dist.for}" />
+		<move tofile="${dist}/${dist.for}/${app.dist.name}.exe" file="${dist}/${app.dist.name}.exe" />
+
+	</target>
+	<!--
+		=======================================================================
+							Creates dist
+
+		============================================================================
+	-->
+	<target name="dist" depends="compile">
+		<echo level="info">==========Inergy========</echo>
+		<antcall target="package">
+			<param name="dist.for" value="inergy" />
+		</antcall>
+
+		<echo level="info">==========Service========</echo>
+		<antcall target="package">
+			<param name="dist.for" value="service" />
+		</antcall>
+
+		<delete dir="${build}" />
+	</target>
+
+	<!--
+		=======================================================================
+							Other dist
+
+		============================================================================
+	-->
+	<target name="distOptimus" depends="compile">
+		<echo level="info">==========Optimus========</echo>
+
+		<antcall target="package">
+			<param name="dist.for" value="optimus" />
+		</antcall>
+		<delete dir="${build}" />
+	</target>
+
+	<target name="distTestServer" depends="compile">
+		<echo level="info">==========Test Server========</echo>
+
+		<antcall target="package">
+			<param name="dist.for" value="test" />
+		</antcall>
+		<delete dir="${build}" />
+	</target>
+
+</project>
