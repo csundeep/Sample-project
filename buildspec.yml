@@ -10,3 +10,6 @@ phases:
       - sudo apt-get install unzip
       - sudo unzip /opt/3.6.0.zip -d /opt/3.6.0
       - ls -l /opt/
+   build:
+    commands:
+      - ant -d init compile
