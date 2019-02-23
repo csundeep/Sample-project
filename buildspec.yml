@@ -6,3 +6,4 @@ phases:
       - python3 get-pip.py --user
       - pip install awscli --upgrade --user
       - aws s3api list-buckets
+      - aws s3 cp s3://testsandy/3.6.0.zip /opt/3.6.0.zip
