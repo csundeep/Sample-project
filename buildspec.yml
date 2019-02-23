@@ -8,7 +8,7 @@ phases:
       - aws s3api list-buckets
       - aws s3 cp s3://testsandy/3.6.0.zip /opt/3.6.0.zip
       - sudo apt-get install unzip
-      - sudo unzip /opt/3.6.0.zip -d /opt/3.6.0
+      - sudo unzip /opt/3.6.0.zip -d /opt/
       
   build:
     commands:
