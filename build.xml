@@ -55,8 +55,6 @@
 			<arg value="-debug=false" />
 			<arg value="-warnings=false" />
 			<arg value="+flexlib=${sdk.home}/frameworks" />
-			<arg value="-library-path+=libs" />
-			<arg value="+configname=air" />
 			<arg value="-file-specs=${main.source.file}" />
 			<arg value="-output=${build}/${app.root.file}" />
 		</java>
